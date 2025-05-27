@@ -4,55 +4,72 @@ class BootScene extends Phaser.Scene {
     }
 
     preload() {
-        // Nada para carregar aqui (sem imagens externas)
+        // Nada a carregar de fora
     }
 
     create() {
-        // Criar texturas para as cartas com formas e cores
-        this.createShapeTexture('circle_red', 0xff0000, 'circle');
-        this.createShapeTexture('square_blue', 0x0000ff, 'square');
-        this.createShapeTexture('triangle_green', 0x00ff00, 'triangle');
-        // Adicione aqui outras formas/cores que precisar
+        const shapes = [
+            { key: 'circle_red', color: 0xff0000, shape: 'circle' },
+            { key: 'circle_blue', color: 0x0000ff, shape: 'circle' },
+            { key: 'circle_green', color: 0x00ff00, shape: 'circle' },
 
-        // Criar textura para a face traseira da carta (exemplo simples)
+            { key: 'square_red', color: 0xff0000, shape: 'square' },
+            { key: 'square_blue', color: 0x0000ff, shape: 'square' },
+            { key: 'square_green', color: 0x00ff00, shape: 'square' },
+
+            { key: 'triangle_red', color: 0xff0000, shape: 'triangle' },
+            { key: 'triangle_green', color: 0x00ff00, shape: 'triangle' },
+            { key: 'triangle_blue', color: 0x0000ff, shape: 'triangle' }
+        ];
+
+        shapes.forEach(({ key, color, shape }) => {
+            this.createShapeTexture(key, color, shape);
+        });
+
         this.createBackTexture('card_back');
 
         this.scene.start('MenuScene');
     }
 
     createShapeTexture(key, color, shape) {
+        const size = 80;
+        const center = size / 2;
         const graphics = this.make.graphics({ x: 0, y: 0, add: false });
+
         graphics.fillStyle(color, 1);
 
         switch(shape) {
             case 'circle':
-                graphics.fillCircle(50, 50, 40);
+                graphics.fillCircle(center, center, size / 2.5);
                 break;
             case 'square':
-                graphics.fillRect(10, 10, 80, 80);
+                graphics.fillRect(center - 25, center - 25, 50, 50);
                 break;
             case 'triangle':
                 graphics.beginPath();
-                graphics.moveTo(50, 10);
-                graphics.lineTo(90, 90);
-                graphics.lineTo(10, 90);
+                graphics.moveTo(center, center - 30);
+                graphics.lineTo(center + 30, center + 25);
+                graphics.lineTo(center - 30, center + 25);
                 graphics.closePath();
                 graphics.fillPath();
                 break;
         }
 
-        graphics.generateTexture(key, 100, 100);
+        graphics.generateTexture(key, size, size);
         graphics.destroy();
     }
 
     createBackTexture(key) {
+        const size = 80;
         const graphics = this.make.graphics({ x: 0, y: 0, add: false });
-        graphics.fillStyle(0x808080, 1); // cinza para o verso
-        graphics.fillRect(0, 0, 100, 100);
+        graphics.fillStyle(0x888888, 1);
+        graphics.fillRect(0, 0, size, size);
 
-        // Pode adicionar detalhes, linhas, ou padrões aqui
+        // Detalhe simples no verso (linha branca)
+        graphics.lineStyle(2, 0xffffff, 1);
+        graphics.strokeRect(4, 4, size - 8, size - 8);
 
-        graphics.generateTexture(key, 100, 100);
+        graphics.generateTexture(key, size, size);
         graphics.destroy();
     }
 }
