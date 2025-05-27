@@ -19,13 +19,27 @@ class GameScene extends Phaser.Scene {
 
         this.score = this.registry.get('score') || 0;
 
-        this.scoreText = this.add.text(20, 20, `Pontuação: ${this.score}`, { fontSize: '24px', fill: '#000000' });
-        this.levelText = this.add.text(20, 50, `Nível: ${this.level}`, { fontSize: '24px', fill: '#000000' });
+        this.scoreText = this.add.text(20, 20, `Pontuação: ${this.score}`, {
+            fontSize: '24px',
+            fill: '#000000',
+            fontFamily: 'Roboto'
+          });
+          
+          this.levelText = this.add.text(20, 50, `Nível: ${this.level}`, {
+            fontSize: '24px',
+            fill: '#000000',
+            fontFamily: 'Roboto'
+          });
+          
 
         this.timeLeft = 60 - (this.level - 1) * 10; // Tempo diminui 10 seg a cada nível, mínimo 20s
         if (this.timeLeft < 20) this.timeLeft = 20;
 
-        this.timerText = this.add.text(650, 20, `Tempo: ${this.timeLeft}`, { fontSize: '24px', fill: '#000000' });
+        this.timerText = this.add.text(650, 20, `Tempo: ${this.timeLeft}`, { 
+            fontSize: '24px', 
+            fill: '#000000',
+            fontFamily: 'Roboto'
+        });
 
         this.timerEvent = this.time.addEvent({
             delay: 1000,
