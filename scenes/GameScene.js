@@ -9,6 +9,8 @@ class GameScene extends Phaser.Scene {
 
     init(data) {
         this.level = data.level || 1;
+        this.bonusTime = data.bonusTime || 0; // Tempo bônus específico para este nível
+        this.score = data.score || 0;
     }
 
     create() {
@@ -17,26 +19,24 @@ class GameScene extends Phaser.Scene {
         this.canPick = true;
         this.matchedPairs = 0;
 
-        this.score = this.registry.get('score') || 0;
-
         this.scoreText = this.add.text(20, 20, `Pontuação: ${this.score}`, {
             fontSize: '24px',
             fill: '#000000',
             fontFamily: 'Roboto'
-          });
-          
-          this.levelText = this.add.text(20, 50, `Nível: ${this.level}`, {
+        });
+
+        this.levelText = this.add.text(20, 50, `Nível: ${this.level}`, {
             fontSize: '24px',
             fill: '#000000',
             fontFamily: 'Roboto'
-          });
-          
+        });
 
-        this.timeLeft = 60 - (this.level - 1) * 10; // Tempo diminui 10 seg a cada nível, mínimo 20s
+        // Tempo base com bônus (não acumulativo)
+        this.timeLeft = 60 - (this.level - 1) * 10 + this.bonusTime;
         if (this.timeLeft < 20) this.timeLeft = 20;
 
-        this.timerText = this.add.text(650, 20, `Tempo: ${this.timeLeft}`, { 
-            fontSize: '24px', 
+        this.timerText = this.add.text(650, 20, `Tempo: ${this.timeLeft}`, {
+            fontSize: '24px',
             fill: '#000000',
             fontFamily: 'Roboto'
         });
@@ -48,7 +48,7 @@ class GameScene extends Phaser.Scene {
                 this.timerText.setText(`Tempo: ${this.timeLeft}`);
 
                 if (this.timeLeft <= 0) {
-                    this.scene.start('GameOverScene');
+                    this.scene.start('GameOverScene', { score: this.score });
                 }
             },
             loop: true
@@ -58,10 +58,8 @@ class GameScene extends Phaser.Scene {
     }
 
     createBoard() {
-        // Números pares de cartas - aumenta com o nível (máx 8 pares)
-        let pairsCount = Math.min(this.level + 2, 8); // ex: nível 1 -> 3 pares, até 8 pares max
+        let pairsCount = Math.min(this.level + 2, 8);
 
-        // Array com pares possíveis (usamos texturas já criadas)
         const possiblePairs = [
             { id: 1, key: 'circle_red' },
             { id: 2, key: 'square_blue' },
@@ -73,33 +71,26 @@ class GameScene extends Phaser.Scene {
             { id: 8, key: 'square_green' },
         ];
 
-        // Selecionar somente os pares necessários para o nível
         let pairCards = possiblePairs.slice(0, pairsCount);
-
-        // Duplicar para formar pares
         let cardsArray = pairCards.concat(pairCards);
 
-        // Embaralhar Fisher-Yates
         for (let i = cardsArray.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [cardsArray[i], cardsArray[j]] = [cardsArray[j], cardsArray[i]];
         }
 
-        // Definir posição e gap menores para caber na tela 800x600
         const cols = 4;
         const rows = Math.ceil(cardsArray.length / cols);
 
-        const cardSize = 70; // cartas menores
+        const cardSize = 70;
         const gapX = 10;
         const gapY = 15;
 
-        // Calcular offset para centralizar no eixo X
         const totalWidth = cols * cardSize + (cols - 1) * gapX;
-        const startX = (800 - totalWidth) / 2 + cardSize/2;
+        const startX = (800 - totalWidth) / 2 + cardSize / 2;
 
-        // Calcular offset para centralizar no eixo Y
         const totalHeight = rows * cardSize + (rows - 1) * gapY;
-        const startY = (600 - totalHeight) / 2 + cardSize/2 + 30; // +30 para não colar no topo
+        const startY = (600 - totalHeight) / 2 + cardSize / 2 + 30;
 
         for (let i = 0; i < cardsArray.length; i++) {
             let col = i % cols;
@@ -124,25 +115,36 @@ class GameScene extends Phaser.Scene {
             this.canPick = false;
 
             if (this.firstCard.id === card.id && this.firstCard !== card) {
-                // Par encontrado
                 this.firstCard.setMatched();
                 card.setMatched();
                 this.matchedPairs++;
 
-                // Incrementar pontuação com tempo restante
                 this.score += this.timeLeft * 10;
                 this.scoreText.setText(`Pontuação: ${this.score}`);
-                this.registry.set('score', this.score);
 
                 this.time.delayedCall(500, () => {
                     this.firstCard = null;
                     this.canPick = true;
 
                     if (this.matchedPairs === this.cards.length / 2) {
+                        // Tempo bônus somente para o próximo nível
+                        let extra = 0;
+                        switch (this.level) {
+                            case 1: extra = 5; break;
+                            case 2: extra = 10; break;
+                            case 3: extra = 15; break;
+                            case 4: extra = 20; break;
+                            default: extra = 0; break;
+                        }
+
                         if (this.level < 5) {
-                            this.scene.start('GameScene', { level: this.level + 1 });
+                            this.scene.start('GameScene', {
+                                level: this.level + 1,
+                                bonusTime: extra,  // Só esse valor, sem acumular
+                                score: this.score
+                            });
                         } else {
-                            this.scene.start('GameOverScene', { win: true });
+                            this.scene.start('GameOverScene', { win: true, score: this.score });
                         }
                     }
                 });

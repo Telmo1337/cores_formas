@@ -5,18 +5,17 @@ class GameOverScene extends Phaser.Scene {
 
     init(data) {
         this.win = data.win || false;
+        this.finalScore = data.score || 0;
     }
 
     create() {
-        const finalScore = this.registry.get('score') || 0;
-
         this.add.text(400, 220, this.win ? 'Parabéns! Você venceu!' : 'Tempo esgotado!', {
             fontSize: '32px',
             fill: '#000000',
             fontFamily: 'Roboto'
         }).setOrigin(0.5);
 
-        this.add.text(400, 270, `Pontuação final: ${finalScore}`, {
+        this.add.text(400, 270, `Pontuação final: ${this.finalScore}`, {
             fontSize: '28px',
             fill: '#000000',
             fontFamily: 'Roboto'
@@ -29,7 +28,6 @@ class GameOverScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         this.input.once('pointerdown', () => {
-            this.registry.set('score', 0);
             this.scene.start('MenuScene');
         });
     }
