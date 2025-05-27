@@ -3,26 +3,31 @@ class GameOverScene extends Phaser.Scene {
         super({ key: 'GameOverScene' });
     }
 
-    create() {
-        const { width, height } = this.sys.game.canvas;
+    init(data) {
+        this.win = data.win || false;
+    }
 
-        this.add.text(width / 2, height / 2 - 50, 'Parabéns! Ganhou!', {
-            fontSize: '48px',
-            color: '#008000',
-            fontFamily: 'Arial',
+    create() {
+        const finalScore = this.registry.get('score') || 0;
+
+        this.add.text(400, 220, this.win ? 'Parabéns! Você venceu!' : 'Tempo esgotado!', {
+            fontSize: '32px',
+            fill: '#000000'
         }).setOrigin(0.5);
 
-        const restartButton = this.add.text(width / 2, height / 2 + 50, 'Jogar Novamente', {
-            fontSize: '32px',
-            backgroundColor: '#0a84ff',
-            color: '#fff',
-            padding: { x: 20, y: 10 },
-            fontFamily: 'Arial',
-            borderRadius: 5,
-        }).setOrigin(0.5).setInteractive();
+        this.add.text(400, 270, `Pontuação final: ${finalScore}`, {
+            fontSize: '28px',
+            fill: '#000000'
+        }).setOrigin(0.5);
 
-        restartButton.on('pointerdown', () => {
-            this.scene.start('GameScene');
+        this.add.text(400, 320, 'Clique para voltar ao menu', {
+            fontSize: '20px',
+            fill: '#000000'
+        }).setOrigin(0.5);
+
+        this.input.once('pointerdown', () => {
+            this.registry.set('score', 0);
+            this.scene.start('MenuScene');
         });
     }
 }

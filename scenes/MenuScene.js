@@ -4,12 +4,13 @@ class MenuScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(300, 250, 'Cores e Formas', { fontSize: '32px', fill: '#fff' });
-        const startText = this.add.text(340, 320, 'Começar', { fontSize: '24px', fill: '#0f0' });
+        this.registry.set('score', 0); // Resetar pontuação ao iniciar
 
-        startText.setInteractive();
-        startText.on('pointerdown', () => {
-            this.scene.start('GameScene');
+        this.add.text(400, 250, 'Cores e Formas', { fontSize: '32px', fill: '#000000' }).setOrigin(0.5);
+        this.add.text(400, 320, 'Clique para começar', { fontSize: '20px', fill: '#000000' }).setOrigin(0.5);
+
+        this.input.once('pointerdown', () => {
+            this.scene.start('GameScene', { level: 1 });
         });
     }
 }
