@@ -19,15 +19,21 @@ class GameScene extends Phaser.Scene {
         this.canPick = true;
         this.matchedPairs = 0;
 
+        const backgroundIMG = `bglvl${this.level}`;
+        this.add.image(400,300, backgroundIMG).setDisplaySize(800,600);
+
+
+
+
         this.scoreText = this.add.text(20, 20, `Pontuação: ${this.score}`, {
             fontSize: '24px',
-            fill: '#000000',
+            fill: '#FFFFFF',
             fontFamily: 'Roboto'
         });
 
         this.levelText = this.add.text(20, 50, `Nível: ${this.level}`, {
             fontSize: '24px',
-            fill: '#000000',
+            fill: '#FFFFFF',
             fontFamily: 'Roboto'
         });
 
@@ -37,7 +43,7 @@ class GameScene extends Phaser.Scene {
 
         this.timerText = this.add.text(650, 20, `Tempo: ${this.timeLeft}`, {
             fontSize: '24px',
-            fill: '#000000',
+            fill: '#FFFFFF',
             fontFamily: 'Roboto'
         });
 

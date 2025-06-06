@@ -5,6 +5,12 @@ class BootScene extends Phaser.Scene {
 
     preload() {
         // Nada para carregar aqui (sem imagens externas)
+
+        this.load.image('bglvl1', 'assets/STR/backgroundlevel1.png');
+        this.load.image('bglvl2', 'assets/STR/backgroundlevel2.png');
+        this.load.image('bglvl3', 'assets/STR/backgroundlevel3.png');
+        this.load.image('bglvl4', 'assets/STR/backgroundlevel4.png');
+        this.load.image('bglvl5', 'assets/STR/backgroundlevel5.png');
     }
 
     create() {
