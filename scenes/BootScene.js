@@ -4,8 +4,14 @@ class BootScene extends Phaser.Scene {
     }
 
     preload() {
-        // Nada para carregar aqui (sem imagens externas)
-
+        //sons
+        this.load.audio('bgm1', 'assets/sounds/music1.mp3');
+        this.load.audio('bgm2', 'assets/sounds/music2.mp3');
+        //menumusic
+        this.load.audio('menuMusic', 'assets/sounds/menumusic.mp3');
+        //gameovermsuic
+        this.load.audio('gameOverMusic', 'assets/sounds/gameover.mp3');
+        //images
         this.load.image('bglvl1', 'assets/STR/backgroundlevel1.png');
         this.load.image('bglvl2', 'assets/STR/backgroundlevel2.png');
         this.load.image('bglvl3', 'assets/STR/backgroundlevel3.png');

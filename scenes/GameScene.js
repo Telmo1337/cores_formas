@@ -19,8 +19,18 @@ class GameScene extends Phaser.Scene {
         this.canPick = true;
         this.matchedPairs = 0;
 
+        //add imagens em cada nível
         const backgroundIMG = `bglvl${this.level}`;
         this.add.image(400,300, backgroundIMG).setDisplaySize(800,600);
+
+
+        //add music
+        this.musicTracks = ['bgm1', 'bgm2', 'bgm3'];
+        this.currentTrackIndex = 0;
+
+        this.playNextTrack();
+
+
 
 
 
@@ -62,6 +72,23 @@ class GameScene extends Phaser.Scene {
 
         this.createBoard();
     }
+
+    playNextTrack() {
+        const trackKey = this.musicTracks[this.currentTrackIndex];
+        
+        this.backgroundMusic = this.sound.add(trackKey);
+        this.backgroundMusic.play();
+    
+        // Quando terminar, tocar a próxima
+        this.backgroundMusic.once('complete', () => {
+            this.currentTrackIndex++;
+            if (this.currentTrackIndex >= this.musicTracks.length) {
+                this.currentTrackIndex = 0; // recomeça a lista
+            }
+            this.playNextTrack();
+        });
+    }
+    
 
     createBoard() {
         let pairsCount = Math.min(this.level + 2, 8);
@@ -136,10 +163,10 @@ class GameScene extends Phaser.Scene {
                         // Tempo bônus somente para o próximo nível
                         let extra = 0;
                         switch (this.level) {
-                            case 1: extra = 5; break;
-                            case 2: extra = 10; break;
-                            case 3: extra = 15; break;
-                            case 4: extra = 20; break;
+                            case 1: extra = 2; break;
+                            case 2: extra = 6; break;
+                            case 3: extra = 9; break;
+                            case 4: extra = 13; break;
                             default: extra = 0; break;
                         }
 

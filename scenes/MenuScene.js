@@ -4,6 +4,17 @@ class MenuScene extends Phaser.Scene {
     }
 
     create() {
+        this.menuMusic = this.sound.add('menuMusic', { loop: true, volume: 0.5 });
+        this.menuMusic.play();
+
+        // Botão ou clique para começar o jogo
+        this.input.once('pointerdown', () => {
+            this.menuMusic.stop(); // parar a música do menu
+            this.scene.start('GameScene'); // ou o nome da sua cena inicial de jogo
+        });
+
+
+
         this.registry.set('score', 0); // Resetar pontuação ao iniciar
 
         this.add.text(400, 250, 'Cores e Formas', { 
