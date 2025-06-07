@@ -4,33 +4,63 @@ class MenuScene extends Phaser.Scene {
     }
 
     create() {
+        // Fundo
+        this.add.image(400, 300, 'menuBg').setDisplaySize(800, 600);
+
+        // Música do menu
         this.menuMusic = this.sound.add('menuMusic', { loop: true, volume: 0.5 });
         this.menuMusic.play();
 
-        // Botão ou clique para começar o jogo
-        this.input.once('pointerdown', () => {
-            this.menuMusic.stop(); // parar a música do menu
-            this.scene.start('GameScene'); // ou o nome da sua cena inicial de jogo
+        // Título
+        this.add.text(400, 150, 'Cores e Formas', {
+            fontSize: '48px',
+            fill: '#FFFFFF',
+            fontFamily: 'Roboto',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        // Botão "Começar o jogo"
+        const startButton = this.add.text(400, 300, 'Começar o jogo', {
+            fontSize: '32px',
+            fill: '#FFFFFF',
+            fontFamily: 'Roboto',
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+        startButton.on('pointerdown', () => {
+            this.menuMusic.stop();
+            this.scene.start('GameScene', { level: 1 });
         });
 
-
-
-        this.registry.set('score', 0); // Resetar pontuação ao iniciar
-
-        this.add.text(400, 250, 'Cores e Formas', { 
-            fontSize: '32px', 
+        // Botão "Regras"
+        const rulesButton = this.add.text(400, 380, 'Regras', {
+            fontSize: '28px',
             fill: '#FFFFFF',
-            fontFamily: 'Roboto'
-        
-        }).setOrigin(0.5);
-        this.add.text(400, 320, 'Clique para começar', { 
-            fontSize: '20px', 
-            fill: '#FFFFFF', 
-            fontFamily: 'Roboto' 
-        }).setOrigin(0.5);
+            fontFamily: 'Roboto',
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-        this.input.once('pointerdown', () => {
-            this.scene.start('GameScene', { level: 1 });
+        rulesButton.on('pointerdown', () => {
+            this.showRules();
+        });
+    }
+
+    showRules() {
+        if (this.rulesText) {
+            this.rulesText.destroy();
+        }
+
+        this.rulesText = this.add.text(400, 500,
+            'Combine todas as cartas antes do tempo acabar.\nClique nas cartas para revelar as formas.\nBoa sorte!',
+            {
+                fontSize: '20px',
+                fill: '#FFFFFF',
+                fontFamily: 'Roboto',
+                align: 'center',
+                wordWrap: { width: 700 }
+            }
+        ).setOrigin(0.5).setDepth(10).setInteractive();
+
+        this.rulesText.on('pointerdown', () => {
+            this.rulesText.destroy();
         });
     }
 }

@@ -41,6 +41,9 @@ class Card extends Phaser.GameObjects.Container {
                 this.front.setVisible(this.isFlipped);
                 this.back.setVisible(!this.isFlipped);
 
+                // Toca som de virar carta
+                this.scene.sound.play('flipSound', { volume: 0.5 });
+
                 this.scene.tweens.add({
                     targets: this,
                     scaleX: 1,

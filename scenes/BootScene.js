@@ -11,12 +11,16 @@ class BootScene extends Phaser.Scene {
         this.load.audio('menuMusic', 'assets/sounds/menumusic.mp3');
         //gameovermsuic
         this.load.audio('gameOverMusic', 'assets/sounds/gameover.mp3');
+        //cardflip
+        this.load.audio('flipSound', 'assets/sounds/flipsound.mp3');
         //images
         this.load.image('bglvl1', 'assets/STR/backgroundlevel1.png');
         this.load.image('bglvl2', 'assets/STR/backgroundlevel2.png');
         this.load.image('bglvl3', 'assets/STR/backgroundlevel3.png');
         this.load.image('bglvl4', 'assets/STR/backgroundlevel4.png');
         this.load.image('bglvl5', 'assets/STR/backgroundlevel5.png');
+        //menubackground
+        this.load.image('menuBg', 'assets/STR/menu.jpg');
     }
 
     create() {

@@ -25,7 +25,7 @@ class GameScene extends Phaser.Scene {
 
 
         //add music
-        this.musicTracks = ['bgm1', 'bgm2', 'bgm3'];
+        this.musicTracks = ['bgm1', 'bgm2'];
         this.currentTrackIndex = 0;
 
         this.playNextTrack();
@@ -57,6 +57,7 @@ class GameScene extends Phaser.Scene {
             fontFamily: 'Roboto'
         });
 
+        
         this.timerEvent = this.time.addEvent({
             delay: 1000,
             callback: () => {
@@ -140,7 +141,7 @@ class GameScene extends Phaser.Scene {
     cardClicked(card) {
         if (!this.canPick || card.isFlipped || card.isMatched) return;
 
-        card.flip();
+        card.flip(true);
 
         if (!this.firstCard) {
             this.firstCard = card;
@@ -184,8 +185,8 @@ class GameScene extends Phaser.Scene {
 
             } else {
                 this.time.delayedCall(1000, () => {
-                    this.firstCard.flip();
-                    card.flip();
+                    this.firstCard.flip(false);
+                    card.flip(false);
                     this.firstCard = null;
                     this.canPick = true;
                 });
