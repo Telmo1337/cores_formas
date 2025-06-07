@@ -24,7 +24,7 @@ class BootScene extends Phaser.Scene {
     }
 
     create() {
-        // Criar texturas para as cartas com formas e cores
+        //criar as texturas das formas
         this.createShapeTexture('circle_red', 0xff0000, 'circle');
         this.createShapeTexture('square_blue', 0x0000ff, 'square');
         this.createShapeTexture('triangle_green', 0x00ff00, 'triangle');
@@ -34,12 +34,15 @@ class BootScene extends Phaser.Scene {
         this.createShapeTexture('circle_green', 0x00ff00, 'circle');
         this.createShapeTexture('square_green', 0x00ff00, 'square');
 
-        // Criar textura para a face traseira da carta (exemplo simples)
+        //criar a textura das costas das cartas
         this.createBackTexture('card_back');
 
+        //iniciar a cena do menu
         this.scene.start('MenuScene');
     }
 
+
+    //metodo para criar texturas de formas
     createShapeTexture(key, color, shape) {
         const graphics = this.make.graphics({ x: 0, y: 0, add: false });
         graphics.fillStyle(color, 1);
@@ -60,11 +63,13 @@ class BootScene extends Phaser.Scene {
                 graphics.fillPath();
                 break;
         }
-
+        //gere a textura
         graphics.generateTexture(key, 100, 100);
+        //limpa os graficos
         graphics.destroy();
     }
 
+    //metodo para criar a textura do verso das cartas
     createBackTexture(key) {
         const graphics = this.make.graphics({ x: 0, y: 0, add: false });
         graphics.fillStyle(0x808080, 1); // cinza para o verso
